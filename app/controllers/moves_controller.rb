@@ -4,7 +4,14 @@ class MovesController < ApplicationController
 	end
 
 	def show
-		@storyline = current_user.moves.daily_storyline(:trackPoints => true)
+		date = params[:date]
+		if !date.nil?
+			@storyline = current_user.moves.daily_storyline(date, :trackPoints => true)
+		else
+			@storyline = current_user.moves.daily_storyline(:trackPoints => true)
+		end
+
+		puts @storyline.to_json
 		segments = @storyline.first["segments"]
 		places = []
 		trackPoints = []
@@ -13,9 +20,11 @@ class MovesController < ApplicationController
 				places << segment
 			end
 
-			segment["activities"].each do |activity|
-				if !activity["trackPoints"].empty?
-					trackPoints.concat(activity["trackPoints"])
+			if !segment["activities"].nil?
+				segment["activities"].each do |activity|
+					if !activity["trackPoints"].empty?
+						trackPoints.concat(activity["trackPoints"])
+					end
 				end
 			end
 		end
