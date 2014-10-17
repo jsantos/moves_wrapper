@@ -4,32 +4,40 @@ class MovesController < ApplicationController
 	end
 
 	def show
-		date = params[:date]
-		if !date.nil?
-			@storyline = current_user.moves.daily_storyline(date, :trackPoints => true)
+		if !params[:date].nil?
+			@storyline = current_user.moves.daily_storyline(params[:date], trackPoints: true)
+		elsif !params[:from].nil? and !params[:to].nil?
+			@storyline = current_user.moves.daily_storyline(from: params[:from], to: params[:to], trackPoints: true)
+		elsif !params[:pastdays].nil?
+			@storyline = current_user.moves.daily_storyline(:pastDays => params[:pastdays], trackPoints: true)
+		elsif !params[:month].nil?
+			@storyline = current_user.moves.daily_storyline(params[:month], trackPoints: true)
 		else
-			@storyline = current_user.moves.daily_storyline(:trackPoints => true)
+			@storyline = current_user.moves.daily_storyline(trackPoints: true)
 		end
 
-		puts @storyline.to_json
-		segments = @storyline.first["segments"]
 		places = []
 		trackPoints = []
-		segments.each do |segment|
-			if segment["type"] == "place"
-				places << segment
-			end
 
-			if !segment["activities"].nil?
-				segment["activities"].each do |activity|
-					if !activity["trackPoints"].empty?
-						trackPoints.concat(activity["trackPoints"])
+		@storyline.each do |day|
+			segments = day["segments"]
+			segments.each do |segment|
+				if segment["type"] == "place"
+					places << segment
+				end
+
+				if !segment["activities"].nil?
+					segment["activities"].each do |activity|
+						if !activity["trackPoints"].nil?
+							trackPoints.concat(activity["trackPoints"])
+						end
 					end
 				end
 			end
 		end
 
-		gon.track_points = trackPoints.map{ |point| {"lng" => point["lon"], "lat" => point["lat"]}}
+		@trackpoints = trackPoints.map{ |point| {"lng" => point["lon"], "lat" => point["lat"], "time" => point["time"]}}
+		gon.track_points = @trackpoints
 
 		gon.places = Gmaps4rails.build_markers(places) { |place, marker|
   		marker.lat place["place"]["location"]["lat"]

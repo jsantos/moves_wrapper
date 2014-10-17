@@ -10,7 +10,55 @@
   <%= include_gon %>
 <% end %>
 <br>
-<div>
-	<h5>Raw data</h5>
-	<pre class="prettyprint"><%= JSON.pretty_generate(@storyline) %></pre>
+
+<div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          Usage
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in">
+      <div class="panel-body">
+      	<h4>This page can be seen using multiple parameters:</h4>
+        <ul>
+        	<li><b>Specific Date:</b> <%= link_to moves_data_path(date: "2014-10-15"), moves_data_path(date: "2014-10-15") %></li>
+        	<li><b>Specific Month:</b> <%= link_to moves_data_path(month: "2014-10"), moves_data_path(month: "2014-10") %></li>
+        	<li><b>Specific Time Frame:</b><%= link_to moves_data_path(from: "2014-10-15", to: "2014-10-17"), moves_data_path(from: "2014-10-15", to: "2014-10-17") %></li>
+        	<li><b>Past days:</b>  <%= link_to moves_data_path(pastdays: 3), moves_data_path(pastdays: 3) %> to see data from the 3 latest days (up to 7 days)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+          TrackPoints
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse">
+      <div class="panel-body">
+      	<pre class="prettyprint"><%= JSON.pretty_generate(@trackpoints) %></pre>
+
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+          Raw Data
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse">
+      <div class="panel-body">
+      	<pre class="prettyprint"><%= JSON.pretty_generate(@storyline) %></pre>
+      </div>
+    </div>
+  </div>
 </div>
