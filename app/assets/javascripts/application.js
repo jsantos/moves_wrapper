@@ -15,4 +15,5 @@
 //= require twitter/bootstrap
 //= require turbolinks
 //= require gmaps/google
+//= require google-code-prettify-rails/prettify
 //= require_tree .

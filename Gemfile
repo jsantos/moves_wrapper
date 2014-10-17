@@ -52,3 +52,4 @@ group :development do
 end
 
 gem 'rails_12factor', group: :production
+gem 'google-code-prettify-rails'

@@ -20,8 +20,7 @@ class MovesController < ApplicationController
 		trackPoints = []
 
 		@storyline.each do |day|
-			segments = day["segments"]
-			segments.each do |segment|
+			day["segments"].each do |segment|
 				if segment["type"] == "place"
 					places << segment
 				end
